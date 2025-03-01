@@ -1,0 +1,8 @@
+# indica que as regras definidas neste arquivo se aplicam ao nivel atual e subpastas, caso estas nao tenham o .editorconfig proprio
+root = true
+
+# o "[*]" indica que as regras serao aplicadas a todos os arqivos
+# se adicionar "[.js]", por exemplo, a regra será aplicada aplenas para arquivos .js
+[*]
+indent_style = space
+indent_size = 2
