@@ -14,24 +14,30 @@ export default async function migrations(request, response) {
   };
 
   try {
-    if (request.method === "GET") {
-      const pendingMigrations = await migrationRunner(defaultMigrationOptions);
-      response.status(200).json(pendingMigrations);
+    switch (request.method) {
+      case "GET":
+        const pendingMigrations = await migrationRunner(
+          defaultMigrationOptions,
+        );
+        response.status(200).json(pendingMigrations);
+        break;
+
+      case "POST":
+        const migratedMigrations = await migrationRunner({
+          ...defaultMigrationOptions,
+          dryRun: false,
+        });
+
+        if (migratedMigrations.length > 0) {
+          response.status(201).json(migratedMigrations);
+        } else {
+          response.status(200).json(migratedMigrations);
+        }
+        break;
+
+      default:
+        response.status(405).end();
     }
-
-    if (request.method === "POST") {
-      const migratedMigrations = await migrationRunner({
-        ...defaultMigrationOptions,
-        dryRun: false,
-      });
-
-      if (migratedMigrations.length > 0) {
-        return response.status(201).json(migratedMigrations);
-      }
-      return response.status(200).json(migratedMigrations);
-    }
-
-    return response.status(405).end();
   } catch (error) {
     console.error(error);
     throw error;
