@@ -39,6 +39,7 @@
   "devDependencies": {
     "@commitlint/cli": "^19.3.0",
     "@commitlint/config-conventional": "^19.2.2",
+    "@secretlint/secretlint-rule-no-dotenv": "^9.2.0",
     "@secretlint/secretlint-rule-preset-recommend": "^9.2.0",
     "commitizen": "^4.3.0",
     "concurrently": "^8.2.2",
