@@ -12,9 +12,7 @@ export default function StatusPage() {
     <>
       <h1>Status</h1>
       <UpdatedAt />
-      <DatabaseVersion />
-      <MaxConnections />
-      <OpenConnections />
+      <DatabaseStatus />
     </>
   );
 }
@@ -33,44 +31,31 @@ function UpdatedAt() {
   return <div>Última atualização: {updatedAtText}</div>;
 }
 
-function DatabaseVersion() {
+function DatabaseStatus() {
   const { isLoading, data } = useSWR("/api/v1/status", fetchAPI, {
     refreshInterval: 2000,
   });
 
-  let databaseVersionText = "Carregando...";
+  let databaseStatusInformation = "Carregando...";
 
   if (!isLoading && data) {
-    databaseVersionText = data.dependencies.database.version;
+    databaseStatusInformation = (
+      <>
+        <div>Versão: {data.dependencies.database.version}</div>
+        <div>
+          Conexões abertas: {data.dependencies.database.opened_connections}
+        </div>
+        <div>
+          Conexões máximas: {data.dependencies.database.max_connections}
+        </div>
+      </>
+    );
   }
 
-  return <div>Versão do BD: {databaseVersionText}</div>;
-}
-
-function MaxConnections() {
-  const { isLoading, data } = useSWR("/api/v1/status", fetchAPI, {
-    refreshInterval: 2000,
-  });
-
-  let maxConnectionsText = "Carregando...";
-
-  if (!isLoading && data) {
-    maxConnectionsText = data.dependencies.database.max_connections;
-  }
-
-  return <div>Número máximo de conexões: {maxConnectionsText}</div>;
-}
-
-function OpenConnections() {
-  const { isLoading, data } = useSWR("/api/v1/status", fetchAPI, {
-    refreshInterval: 2000,
-  });
-
-  let openConnectionsText = "Carregando...";
-
-  if (!isLoading && data) {
-    openConnectionsText = data.dependencies.database.opened_connections;
-  }
-
-  return <div>Conexões abertas: {openConnectionsText}</div>;
+  return (
+    <>
+      <h2>Database</h2>
+      <div>{databaseStatusInformation}</div>
+    </>
+  );
 }
